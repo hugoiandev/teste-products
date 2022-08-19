@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
+import styles from "./styles.module.css";
+
+interface ICategory {
+  name: string;
+  _id: string;
+}
 
 const Products = () => {
 
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
 
 
   const getProducts = async () => {
@@ -12,6 +19,8 @@ const Products = () => {
     console.log(json.data.nodes);
 
     setProducts(json.data.nodes);
+
+
   }
 
   useEffect(() => {
@@ -28,10 +37,13 @@ const Products = () => {
       </form>
     </header>
     <div>
-      <ul>
+      <ul className={styles.containerItens}>
       {products.map((item: any) => {
         return (
-          <li key={item.id}>{item.name}</li>
+          <li className={styles.listItem} key={item.id}>
+            <p className={styles.title}>{item.name}</p>
+            <img className={styles.photo} src={item.images[0].asset.url} alt={item.images[0].alt} />
+          </li>
         )
       })}
       </ul>
