@@ -1,20 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+
+.header {
+  padding: 50px 10px;
+  background-color: tomato;
+  position: sticky;
+  top: 0;
+}
+
+.form {
+  width: 100%;
+}
+
+.select {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  background-color: white;
+}
+
 .containerItens {
   width: 100%;
   display: flex;
+  justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
+  margin-top: 80px;
 }
 
 .listItem {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   list-style: none;
 }
 
-.title {
-  width: 50px;
-  font-size: 0.8rem;
+.description {
+  width: 120px;
+  font-size: 0.9rem;
+  font-family: 'Open Sans', sans-serif;
+  margin-top: 15px;
 }
 
 .photo {

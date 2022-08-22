@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 
-interface ICategory {
+interface Image {
+  alt: string;
+  asset: { url: string };
+}
+interface Category {
   name: string;
   _id: string;
 }
 
+interface IProducts {
+  name: string;
+  shortDescription: string;
+  id: string;
+  images: Image[];
+  category: Category;
+}
+
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [products, setProducts] = useState<IProducts[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<IProducts[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const getProducts = async () => {
     const response = await fetch("productsCategory.json");
@@ -21,9 +33,9 @@ const Products = () => {
     setFilteredProducts(json.data.nodes);
 
     const filteredIds: string[] = [];
-    const filteredCategories: ICategory[] = [];
+    const filteredCategories: Category[] = [];
 
-    json.data.nodes.forEach((item: any) => {
+    json.data.nodes.forEach((item: IProducts) => {
       const exist = filteredIds.includes(item.category.name);
 
       if (!exist) {
@@ -36,27 +48,25 @@ const Products = () => {
     setCategories(filteredCategories);
   };
 
+  const filterProducts = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.value === "Todos") {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(
+        products.filter((item) => item.category._id === event.target.value)
+      );
+    }
+  };
+
   useEffect(() => {
     getProducts();
   }, []);
 
   return (
     <>
-      <header>
-        <form>
-          <select
-            onChange={(event) => {
-              if (event.target.value === "Todos") {
-                setFilteredProducts(products);
-              } else {
-                setFilteredProducts(
-                  products.filter(
-                    (item: any) => item.category._id === event.target.value
-                  )
-                );
-              }
-            }}
-          >
+      <header className={styles.header}>
+        <form className={styles.form}>
+          <select className={styles.select} onChange={filterProducts}>
             <option value="Todos">Todos</option>
             {categories.map((category) => {
               return (
@@ -70,10 +80,10 @@ const Products = () => {
       </header>
       <div>
         <ul className={styles.containerItens}>
-          {filteredProducts.map((item: any) => {
+          {filteredProducts.map((item) => {
             return (
               <li className={styles.listItem} key={item.id}>
-                <p className={styles.title}>{item.name}</p>
+                <p className={styles.description}>{item.name}</p>
                 <img
                   className={styles.photo}
                   src={item.images[0].asset.url}
